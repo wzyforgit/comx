@@ -190,7 +190,7 @@ void CreatPIDPicture(int Data[],int DataNum,int Base,int max)
 	}
 
 	fwrite(bmp_data, sizeof(RGB_QUAD), PIDW*PIDH, bmp_file);
-	printf("BMP图像生成成功\n");
+	printf("阶跃响应图像生成成功\n");
 	fclose(bmp_file);
 	free(bmp_data);
 	bmp_data = NULL;

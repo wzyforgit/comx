@@ -223,13 +223,62 @@ void PIDtest(void)
 		return;
 	}
 
-	int Data[PIDW / 2];
-	int DataNum;
+	int Data[PIDW / 2];//文件内部数据
+	int DataNum, MaxData;//数据数量,数据最大值
+	int ReachFinalvalue = 0;//抵达终值标记
+	int td, tr, tp, ts;//延迟时间,上升时间,峰值时间,调节时间(时间单位均为ms)
+	td = tr = tp = ts = 0;
+	double Overshoot = 0;//超调量
+
+	int max, base, T;//PID调节输出上限值,本次PID调节输入值,采样周期
+	printf("请输入本次测试的上限值\n");
+	scanf("%d", &max);
+	printf("请输入本次测试的输入值\n");
+	scanf("%d", &base);
+	printf("请输入本次测试的采样周期(ms)\n");
+	scanf("%d", &T);
+
+	printf("计算中...\n");
 	int ch;
-	for (DataNum = 0; DataNum < PIDW / 2; DataNum++)
+	for (DataNum = 0, MaxData = 0; DataNum < PIDW / 2; DataNum++)
 	{
+		/*数据读取*/
 		fscanf(ReFile, "%d", &Data[DataNum]);
+
+		/*计算超调量,峰值时间*/
+		if (Data[DataNum]>MaxData)
+		{
+			MaxData = Data[DataNum];
+			if (MaxData > base)
+			{
+				tp = (DataNum - 1) * T;
+				Overshoot = (double)(MaxData - base) / base;
+			}
+		}
+
+		/*计算调节时间*/
+		if (ts == 0 && (double)abs(Data[DataNum] - base) / base <= 0.02)
+		{
+			ts = (DataNum - 1) * T;
+		}
+		if (ts != 0 && (double)abs(Data[DataNum] - base) / base > 0.02)
+		{
+			ts = 0;
+		}
+
+		/*计算延迟时间*/
+		if (td == 0 && Data[DataNum] >= base / 2)
+		{
+			td = (DataNum - 1) * T;
+		}
+
+		/*计算上升时间*/
+		if (tr == 0 && Data[DataNum] >= base)
+		{
+			tr = (DataNum - 1) * T;
+		}
 		
+		/*读取段终值符(根据通信协议设计)及判断EOF*/
 		ch = getc(ReFile);
 		ch = getc(ReFile);
 		if (ch == EOF)
@@ -238,11 +287,11 @@ void PIDtest(void)
 			ungetc(ch, ReFile);
 	}
 
-	int max, base;
-	printf("请输入本次测试的上限值\n");
-	scanf("%d", &max);
-	printf("请输入本次测试的输入值\n");
-	scanf("%d", &base);
+	printf("计算完成!\n");
+	printf("td=%dms\ntr=%dms\ntp=%dms\nts=%dms\nσ=%lf\n", td, tr, tp, ts, Overshoot);
+	printf("按任意键开始创建本次测试的阶跃响应图像\n");
+	_getch();
 
+	printf("正在生成图片...\n");
 	CreatPIDPicture(Data, DataNum, base, max);
 }
