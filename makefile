@@ -1,4 +1,4 @@
-project=comx
+﻿project=comx
 objects= App.o comx.o init.o Opreat.o photo.o
 CFLAGS = -std=c11 -O2
 $(project):$(objects)
