@@ -1,5 +1,9 @@
+#include"common.h"
 #include"Picture.h"
 #include"comx.h"
+
+#include<stdio.h>
+#include<conio.h>
 
 void ExPic(void)
 {

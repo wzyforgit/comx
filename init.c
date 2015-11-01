@@ -1,4 +1,7 @@
+#include"common.h"
 #include"comx.h"
+
+#include<stdio.h>
 
 BOOL OpenCom(HANDLE *Hcom, char *ComName,DWORD DesAcc,DWORD Flags)
 {

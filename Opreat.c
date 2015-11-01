@@ -1,4 +1,9 @@
+#include"common.h"
 #include"comx.h"
+
+#include<stdio.h>
+#include<conio.h>
+#include<process.h>
 
 volatile BOOL fExit = 0;
 
@@ -89,7 +94,7 @@ void Set05AT(void)
 		   "7.清空配对列表\t\t8.测试AT模式\n"\
 		   "9.退出AT模式\n"\
 		   "显示OK表示设置成功,并可以继续发送指令\n");
-	char *Other;
+	char *Order;
 	int Choose = 0;
 	DWORD WriteNum;
 	while (Choose != '9')
@@ -98,17 +103,17 @@ void Set05AT(void)
 		switch (Choose)
 		{
 		default:printf("指令错误!\n"); system("pause"); exit(EXIT_SUCCESS);
-			CASE '1':Other = SetPra05(NAME);
-			CASE '2':Other = SetPra05(PSWD);
-			CASE '3':Other = "AT+ROLE=0\r\n";
-			CASE '4':Other = "AT+ROLE=1\r\n";
-			CASE '5':Other = "AT+CMODE=0\r\n";
-			CASE '6':Other = SetPra05(UART);
-			CASE '7':Other = "AT+RMAAD\r\n";
-			CASE '8':Other = "AT\r\n";
-			CASE '9':Other = "AT+RESET\r\n";
+			CASE '1':Order = SetPra05(NAME);
+			CASE '2':Order = SetPra05(PSWD);
+			CASE '3':Order = "AT+ROLE=0\r\n";
+			CASE '4':Order = "AT+ROLE=1\r\n";
+			CASE '5':Order = "AT+CMODE=0\r\n";
+			CASE '6':Order = SetPra05(UART);
+			CASE '7':Order = "AT+RMAAD\r\n";
+			CASE '8':Order = "AT\r\n";
+			CASE '9':Order = "AT+RESET\r\n";
 		}
-		if (WriteFile(Hcom, Other, strlen(Other), &WriteNum, NULL) == FALSE)
+		if (WriteFile(Hcom, Order, strlen(Order), &WriteNum, NULL) == FALSE)
 		{
 			printf("串口可能已被拔出\n指令发送失败\n");
 			return;
@@ -121,24 +126,24 @@ void Set05AT(void)
 
 static void SetPra06(HANDLE Hcom, int Choose)
 {
-	char Other[50] = { 0 };
+	char Order[50] = { 0 };
 	DWORD WriteNum;
 	int BAUDnum;
 	if (Choose != UART)
 	{
 		if (Choose == AT)
 		{
-			sprintf(Other, "AT");
+			sprintf(Order, "AT");
 		}
 		else
 		{
 			switch (Choose)
 			{
-				CASE NAME : sprintf(Other, "AT+NAME"); printf("请输入新名字(enter结束)\n");
-				CASE PSWD : sprintf(Other, "AT+PIN"); printf("请输入新密码(enter结束)\n");
+				CASE NAME : sprintf(Order, "AT+NAME"); printf("请输入新名字(enter结束)\n");
+				CASE PSWD : sprintf(Order, "AT+PIN"); printf("请输入新密码(enter结束)\n");
 			}
-			scanf("%s", &Other[strlen(Other)]);
-			Other[49] = '\0';
+			scanf("%s", &Order[strlen(Order)]);
+			Order[49] = '\0';
 		}
 	}
 	else
@@ -150,9 +155,9 @@ static void SetPra06(HANDLE Hcom, int Choose)
 		}
 		BAUDnum = _getch();
 		BAUDnum -= 48;
-		sprintf(Other, "AT+BAUD%d", BAUDnum);
+		sprintf(Order, "AT+BAUD%d", BAUDnum);
 	}
-	if (WriteFile(Hcom, Other, strlen(Other), &WriteNum, NULL) == FALSE)
+	if (WriteFile(Hcom, Order, strlen(Order), &WriteNum, NULL) == FALSE)
 	{
 		printf("串口可能已被拔出\n指令发送失败\n");
 		return;

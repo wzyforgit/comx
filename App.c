@@ -1,4 +1,8 @@
+#include"common.h"
 #include"comx.h"
+
+#include<stdio.h>
+#include<process.h>
 
 void HyperTerminal(void)
 {
@@ -96,26 +100,11 @@ void ReceivePicture(void)
 
 void SetAT(void)
 {
-	printf("请先接好线路,确认无误后继续\n");
-	system("pause");
-	system("cls");
-	printf("请选择芯片型号\n1.HC-05\t2.HC-06\n");
-	switch (_getch())
-	{
-		default:printf("输入错误!\n"); system("pause"); return;
-		CASE '1':Set05AT();
-		CASE '2':Set06AT();
-	}
+	Menu(SetATMenu, SetATMenuNum);
 	fExit=0;
 }
 
 void ExportPicture(void)
 {
-	printf("请选择数据种类\n1.图片\n2.PID测试\n");
-	switch (_getch())
-	{
-		default:printf("输入错误!\n"); system("pause"); return;
-		CASE '1':ExPic();
-		CASE '2':PIDtest();
-	}
+	Menu(ExportPictureMenu, ExportPictureMenuNum);
 }

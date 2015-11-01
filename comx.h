@@ -1,16 +1,7 @@
 #ifndef COMX_H
 #define COMX_H
 
-#define _CRT_SECURE_NO_WARNINGS 1
-#include<stdio.h>
-#include<string.h>
 #include<windows.h>
-#include<process.h>
-#include<conio.h>
-#include<ctype.h>
-
-#define CASE break;case
-#define STRCMP(a,R,b) (strcmp(a,b) R 0)
 
 #define NAME 1
 #define PSWD 2

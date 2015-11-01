@@ -1,10 +1,10 @@
+#include"common.h"
 #include"Picture.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <math.h>
-#include <pshpack2.h>
-#include <poppack.h>
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<pshpack2.h>
+#include<poppack.h>
 
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
